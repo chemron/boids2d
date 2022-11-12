@@ -7,6 +7,7 @@ public class Boid : MonoBehaviour {
     Vector3 size;
     Vector2 screenHalfSizeWorldUnits;
 
+
     // Start is called before the first frame update
     private void Start() {
         size = GetComponent<Renderer>().bounds.size;
@@ -18,15 +19,31 @@ public class Boid : MonoBehaviour {
 
     // Update is called once per frame
     private void Update() {
-        // the position of the 'head' vertex of the boid relative to transform.position
-        Vector3 headPos = transform.position + transform.right * size.x / 2 + transform.up * size.y / 2;
-        Debug.DrawRay(
-            start: headPos,
-            dir: transform.up,
-            color: Color.red
-        );
+    //     // the position of the 'head' vertex of the boid relative to transform.position
+    //     Vector3 headPos = transform.position + transform.right * size.x / 2 + transform.up * size.y / 2;
+    //     Debug.DrawRay(
+    //         start: headPos,
+    //         dir: transform.up,
+    //         color: Color.red
+    //     );
 
-        transform.Translate(Vector3.up * speed * Time.deltaTime, Space.Self);
+    //     transform.Translate(Vector3.up * speed * Time.deltaTime, Space.Self);
+
+    //     if (Mathf.Abs(transform.position.x) > screenHalfSizeWorldUnits.x) {
+    //         transform.position = new Vector3(-1 * Mathf.Sign(transform.position.x) * screenHalfSizeWorldUnits.x, transform.position.y);
+    //     }
+    //     if (Mathf.Abs(transform.position.y) > screenHalfSizeWorldUnits.y) {
+    //         transform.position = new Vector3(transform.position.x, -1 * Mathf.Sign(transform.position.y) * screenHalfSizeWorldUnits.y);
+    //     }
+    }
+
+    public Vector3 GetPosition() {
+        return transform.position;
+    }
+
+    public void ApplyForce(Vector3 force) {
+        Vector3 velocity = Vector3.up * speed + force * Time.deltaTime;
+        transform.Translate(velocity * Time.deltaTime);
 
         if (Mathf.Abs(transform.position.x) > screenHalfSizeWorldUnits.x) {
             transform.position = new Vector3(-1 * Mathf.Sign(transform.position.x) * screenHalfSizeWorldUnits.x, transform.position.y);
@@ -35,4 +52,5 @@ public class Boid : MonoBehaviour {
             transform.position = new Vector3(transform.position.x, -1 * Mathf.Sign(transform.position.y) * screenHalfSizeWorldUnits.y);
         }
     }
+
 }
