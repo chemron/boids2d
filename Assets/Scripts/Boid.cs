@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Boid : MonoBehaviour {
-    public float speed = 7;
     Vector3 size;
     Vector2 screenHalfSizeWorldUnits;
 
@@ -41,9 +40,11 @@ public class Boid : MonoBehaviour {
         return transform.position;
     }
 
-    public void ApplyForce(Vector3 force) {
-        Vector3 velocity = Vector3.up * speed + force * Time.deltaTime;
-        transform.Translate(velocity * Time.deltaTime);
+    public void ApplyForce(Vector3 force, float speed) {
+        Vector3 velocity = transform.up * speed + force * Time.deltaTime;
+        transform.up = velocity;
+        transform.Translate(velocity * Time.deltaTime, Space.World);
+        print(velocity);
 
         if (Mathf.Abs(transform.position.x) > screenHalfSizeWorldUnits.x) {
             transform.position = new Vector3(-1 * Mathf.Sign(transform.position.x) * screenHalfSizeWorldUnits.x, transform.position.y);

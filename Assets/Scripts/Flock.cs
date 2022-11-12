@@ -3,32 +3,27 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Flock : MonoBehaviour {
-    public GameObject boidPrefab;
-    public int numBoids = 10;
-    Vector2 screenHalfSizeWorldUnits;
-
     Boid[] boids;
 
     // boid params
-    [Range(0f, 10f)]
+    public float speed = 10;
+    [Range(0f, 100f)]
     public float sepFactor = 1;
-    [Range(0f, 10f)]
+    [Range(0f, 100f)]
     public float aliFactor = 1;
-    [Range(0f, 10f)]
+    [Range(0f, 100f)]
     public float cohFactor = 1;
     public float viewAngle = 270f;
     public float viewRadius = 2f;
 
     private void Start() {
-        // initialise variables
-        screenHalfSizeWorldUnits = new (Camera.main.aspect * Camera.main.orthographicSize, Camera.main.orthographicSize);
         boids = Object.FindObjectsOfType<Boid>();
-
+        print("bye");
     }
 
 
-    private void update() {
-
+    private void Update() {
+        MoveBoids();
     }
 
     private void MoveBoids() {
@@ -40,9 +35,11 @@ public class Flock : MonoBehaviour {
             aliForce = BoidAlignment(boid);
             cohForce = BoidCohesion(boid);
 
-            totForce = sepFactor * sepForce + aliFactor * aliForce + cohFactor * cohForce;
 
-            boid.ApplyForce(totForce);
+            totForce = sepFactor * sepForce + aliFactor * aliForce + cohFactor * cohForce;
+            print(totForce);
+
+            boid.ApplyForce(totForce, speed);
         }
     }
 

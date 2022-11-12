@@ -10,7 +10,7 @@ public class BoidSpawner : MonoBehaviour {
     // Start is called before the first frame update
 
 
-    private void Start() {
+    private void Awake() {
         screenHalfSizeWorldUnits = new (Camera.main.aspect * Camera.main.orthographicSize, Camera.main.orthographicSize);
 
         // spawn in boids
