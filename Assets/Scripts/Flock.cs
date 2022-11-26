@@ -18,7 +18,6 @@ public class Flock : MonoBehaviour {
 
     private void Start() {
         boids = Object.FindObjectsOfType<Boid>();
-        print("bye");
     }
 
 
@@ -31,13 +30,14 @@ public class Flock : MonoBehaviour {
         Vector3 sepForce, aliForce, cohForce, totForce;
 
         foreach (Boid boid in boids) {
+            totForce = Vector3.zero;
+
             sepForce = BoidSeparation(boid);
             aliForce = BoidAlignment(boid);
             cohForce = BoidCohesion(boid);
 
 
             totForce = sepFactor * sepForce + aliFactor * aliForce + cohFactor * cohForce;
-            print(totForce);
 
             boid.ApplyForce(totForce, speed);
         }
@@ -54,23 +54,17 @@ public class Flock : MonoBehaviour {
         float distance;
 
         foreach (Boid neighbour in boids) {
-            // if neighbour is the boid, continue to next neighbour
-            if (neighbour.Equals(boid)) {
-                continue;
-            }
-
             // relative position of the neigbour
-            neighbourPos = neighbour.GetPosition();
+            neighbourPos = neighbour.GetPosition() - boid.GetPosition();
             distance = neighbourPos.magnitude;
 
-            // if neighbour is outside view range, continue to next neighbour
-            if (distance > viewRadius) {
-                continue;
+            // if neighbour is the boid, continue to next neighbour
+            if ((!neighbour.Equals(boid)) && (distance < viewRadius)){
+                force -= neighbourPos;
             }
-
-            force -= neighbourPos;
         }
 
+        print(force);
         return force;
     }
 

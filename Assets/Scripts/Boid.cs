@@ -6,6 +6,8 @@ public class Boid : MonoBehaviour {
     Vector3 size;
     Vector2 screenHalfSizeWorldUnits;
 
+    public bool isActive = true;
+
 
     // Start is called before the first frame update
     private void Start() {
@@ -14,10 +16,16 @@ public class Boid : MonoBehaviour {
         screenHalfSizeWorldUnits = new (
             x: Camera.main.aspect * Camera.main.orthographicSize + halfPlayerSize.x,
             y: Camera.main.orthographicSize + halfPlayerSize.y);
+        
     }
 
     // Update is called once per frame
     private void Update() {
+        if (isActive) {
+            print("change color");
+            gameObject.GetComponent<Renderer>().material.SetColor("_Color", Color.green);
+        }
+
     //     // the position of the 'head' vertex of the boid relative to transform.position
     //     Vector3 headPos = transform.position + transform.right * size.x / 2 + transform.up * size.y / 2;
     //     Debug.DrawRay(
@@ -41,9 +49,13 @@ public class Boid : MonoBehaviour {
     }
 
     public void ApplyForce(Vector3 force, float speed) {
-        Vector3 velocity = transform.up * speed + force * Time.deltaTime;
+        if (!isActive) {
+            force = Vector3.zero;
+        }
+
+        Vector3 velocity = transform.up + force * Time.deltaTime;
         transform.up = velocity;
-        transform.Translate(velocity * Time.deltaTime, Space.World);
+        transform.Translate(transform.up * speed * Time.deltaTime, Space.World);
         print(velocity);
 
         if (Mathf.Abs(transform.position.x) > screenHalfSizeWorldUnits.x) {
