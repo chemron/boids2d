@@ -15,6 +15,7 @@ public class Boid : MonoBehaviour {
     private void Start() {
         size = GetComponent<Renderer>().bounds.size;
         Vector2 halfPlayerSize = transform.localScale / 2f;
+
         screenHalfSizeWorldUnits = new (
             x: Camera.main.aspect * Camera.main.orthographicSize + halfPlayerSize.x,
             y: Camera.main.orthographicSize + halfPlayerSize.y);
@@ -23,27 +24,6 @@ public class Boid : MonoBehaviour {
 
     // Update is called once per frame
     private void Update() {
-        // if (isActive) {
-        //     print("change color");
-        //     gameObject.GetComponent<Renderer>().material.SetColor("_Color", Color.green);
-        // }
-
-    //     // the position of the 'head' vertex of the boid relative to transform.position
-    //     Vector3 headPos = transform.position + transform.right * size.x / 2 + transform.up * size.y / 2;
-    //     Debug.DrawRay(
-    //         start: headPos,
-    //         dir: transform.up,
-    //         color: Color.red
-    //     );
-
-    //     transform.Translate(Vector3.up * speed * Time.deltaTime, Space.Self);
-
-    //     if (Mathf.Abs(transform.position.x) > screenHalfSizeWorldUnits.x) {
-    //         transform.position = new Vector3(-1 * Mathf.Sign(transform.position.x) * screenHalfSizeWorldUnits.x, transform.position.y);
-    //     }
-    //     if (Mathf.Abs(transform.position.y) > screenHalfSizeWorldUnits.y) {
-    //         transform.position = new Vector3(transform.position.x, -1 * Mathf.Sign(transform.position.y) * screenHalfSizeWorldUnits.y);
-    //     }
     }
 
     public Vector3 GetPosition() {
