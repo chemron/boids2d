@@ -10,7 +10,7 @@ public class Flock : MonoBehaviour {
     [Range(0f, 100f)]
     public float sepFactor = 1;
     [Range(0f, 100f)]
-    public float aliFactor = 1;
+    public float aliFactor = 1/8;
     [Range(0f, 100f)]
     public float cohFactor = 1;
     public float viewAngle = 270f;
@@ -63,13 +63,26 @@ public class Flock : MonoBehaviour {
                 force -= neighbourPos;
             }
         }
-
-        print(force);
         return force;
     }
 
     private Vector3 BoidAlignment(Boid boid) {
-        Vector3 force = Vector3.zero;
+        Vector3 perceived_vel = Vector3.zero;
+
+        foreach (Boid neighbour in boids) {
+
+            // if neighbour is the boid, continue to next neighbour
+            if (!neighbour.Equals(boid)) {
+                perceived_vel += neighbour.GetVelocity();
+            }
+        }
+
+        // average the perceived velocity
+        perceived_vel = perceived_vel / (boids.Length + 1);
+
+        // get the force
+        Vector3 force = perceived_vel - boid.GetVelocity();
+
         return force;
     }
 

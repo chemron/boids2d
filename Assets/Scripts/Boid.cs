@@ -6,6 +6,8 @@ public class Boid : MonoBehaviour {
     Vector3 size;
     Vector2 screenHalfSizeWorldUnits;
 
+    private Vector3 velocity;
+
     public bool isActive = true;
 
 
@@ -16,15 +18,15 @@ public class Boid : MonoBehaviour {
         screenHalfSizeWorldUnits = new (
             x: Camera.main.aspect * Camera.main.orthographicSize + halfPlayerSize.x,
             y: Camera.main.orthographicSize + halfPlayerSize.y);
-        
+
     }
 
     // Update is called once per frame
     private void Update() {
-        if (isActive) {
-            print("change color");
-            gameObject.GetComponent<Renderer>().material.SetColor("_Color", Color.green);
-        }
+        // if (isActive) {
+        //     print("change color");
+        //     gameObject.GetComponent<Renderer>().material.SetColor("_Color", Color.green);
+        // }
 
     //     // the position of the 'head' vertex of the boid relative to transform.position
     //     Vector3 headPos = transform.position + transform.right * size.x / 2 + transform.up * size.y / 2;
@@ -48,15 +50,18 @@ public class Boid : MonoBehaviour {
         return transform.position;
     }
 
+    public Vector3 GetVelocity() {
+        return velocity;
+    }
+
     public void ApplyForce(Vector3 force, float speed) {
         if (!isActive) {
             force = Vector3.zero;
         }
 
-        Vector3 velocity = transform.up + force * Time.deltaTime;
+        velocity = transform.up + force * Time.deltaTime;
         transform.up = velocity;
         transform.Translate(transform.up * speed * Time.deltaTime, Space.World);
-        print(velocity);
 
         if (Mathf.Abs(transform.position.x) > screenHalfSizeWorldUnits.x) {
             transform.position = new Vector3(-1 * Mathf.Sign(transform.position.x) * screenHalfSizeWorldUnits.x, transform.position.y);
