@@ -15,6 +15,7 @@ public class Flock : MonoBehaviour {
     [Range(0f, 100f)]
     public float cohFactor = 1/100;
     public float viewAngle = 270f;
+    [Range(0f, 10f)]
     public float viewRadius = 2f;
 
     private void Start() {
@@ -26,7 +27,6 @@ public class Flock : MonoBehaviour {
         );
 
     }
-
 
     private void Update() {
         MoveBoids();
@@ -41,6 +41,8 @@ public class Flock : MonoBehaviour {
             if (!boid.isActive)
                 continue;
 
+            DrawLines(boid);
+
             totForce = Vector3.zero;
 
             sepForce = BoidSeparation(boid);
@@ -49,9 +51,30 @@ public class Flock : MonoBehaviour {
 
 
             totForce = sepFactor * sepForce + aliFactor * aliForce + cohFactor * cohForce;
-
             boid.ApplyForce(totForce, speed);
         }
+    }
+
+    private void DrawLines(Boid boid) {
+        // return immediately if draw rays is off
+        if (!boid.drawRays)
+            return;
+
+        Vector3 pos = boid.GetPosition();
+        Vector3 neighbourPos;
+        float distance;
+
+        foreach (Boid neighbour in boids) {
+            // relative position of the neigbour
+            neighbourPos = neighbour.GetPosition() - pos;
+            distance = neighbourPos.magnitude;
+
+            // if neighbour is the boid, continue to next neighbour
+            if ((!neighbour.Equals(boid)) && (distance < viewRadius)){
+                Debug.DrawRay(pos, neighbourPos);
+            }
+        }
+
     }
 
     // finds the separation force
@@ -78,22 +101,18 @@ public class Flock : MonoBehaviour {
         // separation from walls
         // top wall
         if (Mathf.Abs((screenHalfSize.y - pos.y)) < viewRadius) {
-            print("top");
             force -= Vector3.up;
         }
         // bottom wall
         if (Mathf.Abs((-screenHalfSize.y - pos.y)) < viewRadius) {
-            print("bot");
             force -= Vector3.down;
         }
         // right wall
         if (Mathf.Abs((screenHalfSize.x - pos.x)) < viewRadius) {
-            print("right");
             force -= Vector3.right;
         }
         // left wall
         if (Mathf.Abs((-screenHalfSize.x - pos.x)) < viewRadius) {
-            print("left");
             force -= Vector3.left;
         }
 
@@ -102,11 +121,19 @@ public class Flock : MonoBehaviour {
 
     private Vector3 BoidAlignment(Boid boid) {
         Vector3 perceivedVel = Vector3.zero;
+        Vector3 pos = boid.GetPosition();
+
+        Vector3 neighbourPos;
+        float distance;
 
         foreach (Boid neighbour in boids) {
+            // relative position of the neighbour
+            neighbourPos = neighbour.GetPosition() - pos;
+            distance = neighbourPos.magnitude;
 
-            // if neighbour is the boid, continue to next neighbour
-            if (!neighbour.Equals(boid)) {
+            // if neighbour is not the current boid, and neighbour is within
+            // view radius, update alignment velocity
+            if (!neighbour.Equals(boid) && (distance < viewRadius)) {
                 perceivedVel += neighbour.GetVelocity();
             }
         }
@@ -122,15 +149,27 @@ public class Flock : MonoBehaviour {
 
     private Vector3 BoidCohesion(Boid boid) {
         Vector3 centrePos = Vector3.zero;
+        // include the current boid - this also prevents any division by 0 later
+        float neighbourCount = 1;
+        Vector3 pos = boid.GetPosition();
+
+        Vector3 neighbourPos;
+        float distance;
 
         foreach (Boid neighbour in boids) {
-            // if neighbour is the boid, continue to next neighbour
-            if (!neighbour.Equals(boid)) {
+            // relative position of the neighbour
+            neighbourPos = neighbour.GetPosition() - pos;
+            distance = neighbourPos.magnitude;
+
+            // if neighbour is not the current boid, and neighbour is within
+            // view radius, update central position
+            if (!neighbour.Equals(boid) && (distance < viewRadius)) {
                 centrePos += neighbour.GetPosition();
+                neighbourCount += 1;
             }
 
             // get 'centre of mass'
-            centrePos = centrePos / (boids.Length + 1);
+            centrePos = centrePos / neighbourCount;
         }
 
         Vector3 force = centrePos - boid.GetPosition();

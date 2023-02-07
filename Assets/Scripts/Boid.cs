@@ -9,7 +9,7 @@ public class Boid : MonoBehaviour {
     private Vector3 velocity;
 
     public bool isActive = true;
-
+    public bool drawRays = true;
 
     // Start is called before the first frame update
     private void Start() {
@@ -31,7 +31,10 @@ public class Boid : MonoBehaviour {
     }
 
     public Vector3 GetVelocity() {
-        return velocity;
+        if (!isActive) {
+            return transform.up;
+        }
+        else return velocity;
     }
 
     public void ApplyForce(Vector3 force, float speed) {
