@@ -148,10 +148,11 @@ public class Flock : MonoBehaviour {
     }
 
     private Vector3 BoidCohesion(Boid boid) {
-        Vector3 centrePos = Vector3.zero;
+
         // include the current boid - this also prevents any division by 0 later
         float neighbourCount = 1;
         Vector3 pos = boid.GetPosition();
+        Vector3 centrePos = pos;
 
         Vector3 neighbourPos;
         float distance;
@@ -163,7 +164,8 @@ public class Flock : MonoBehaviour {
 
             // if neighbour is not the current boid, and neighbour is within
             // view radius, update central position
-            if (!neighbour.Equals(boid) && (distance < viewRadius)) {
+            if (distance < viewRadius) {
+                print(distance);
                 centrePos += neighbour.GetPosition();
                 neighbourCount += 1;
             }

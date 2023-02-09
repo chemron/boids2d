@@ -5,8 +5,9 @@ using UnityEngine;
 public class BoidSpawner : MonoBehaviour {
     public GameObject boidPrefab;
     public int numBoids = 10;
+    public bool setActive = true;
     Vector2 screenHalfSizeWorldUnits;
-    
+
     // Start is called before the first frame update
 
 
@@ -20,7 +21,8 @@ public class BoidSpawner : MonoBehaviour {
                 y: Random.Range(-screenHalfSizeWorldUnits.y, screenHalfSizeWorldUnits.y)
             );
             Quaternion spawnRotation = Quaternion.Euler(0, 0, Random.Range(0, 360));
-            Instantiate(boidPrefab, spawnPostition, spawnRotation);
+            GameObject boid = Instantiate(boidPrefab, spawnPostition, spawnRotation);
+            boid.GetComponent<Boid>().isActive = setActive;
         }
     }
 }
