@@ -19,7 +19,6 @@ public class Boid : MonoBehaviour {
         screenHalfSizeWorldUnits = new (
             x: Camera.main.aspect * Camera.main.orthographicSize + halfPlayerSize.x,
             y: Camera.main.orthographicSize + halfPlayerSize.y);
-
     }
 
     // Update is called once per frame

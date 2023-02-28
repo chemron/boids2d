@@ -153,7 +153,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boidPrefab: {fileID: 1142316583254916011, guid: 869a288de4d07451381bac022a451258, type: 3}
-  numBoids: 5
+  numBoids: 10
+  setActive: 1
 --- !u!4 &518527236
 Transform:
   m_ObjectHideFlags: 0
@@ -222,7 +223,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 10
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -248,7 +249,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -298,8 +299,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 2
-  sepFactor: 0
-  aliFactor: 0
-  cohFactor: 0
+  sepFactor: 1
+  aliFactor: 1
+  cohFactor: 1
   viewAngle: 270
-  viewRadius: 1
+  viewRadius: 3

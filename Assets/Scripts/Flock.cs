@@ -52,6 +52,13 @@ public class Flock : MonoBehaviour {
 
             totForce = sepFactor * sepForce + aliFactor * aliForce + cohFactor * cohForce;
             boid.ApplyForce(totForce, speed);
+
+            print(totForce);
+
+            if (boid.drawRays) {
+                Vector3 pos = boid.GetPosition();
+                Debug.DrawRay(pos, totForce, Color.red);
+            }
         }
     }
 
@@ -149,10 +156,10 @@ public class Flock : MonoBehaviour {
 
     private Vector3 BoidCohesion(Boid boid) {
 
-        // include the current boid - this also prevents any division by 0 later
+        // include the current boid
         float neighbourCount = 1;
         Vector3 pos = boid.GetPosition();
-        Vector3 centrePos = pos;
+        Vector3 centrePos = Vector3.zero;
 
         Vector3 neighbourPos;
         float distance;
@@ -164,9 +171,8 @@ public class Flock : MonoBehaviour {
 
             // if neighbour is not the current boid, and neighbour is within
             // view radius, update central position
-            if (distance < viewRadius) {
-                print(distance);
-                centrePos += neighbour.GetPosition();
+            if (!neighbour.Equals(boid) && (distance < viewRadius)) {
+                centrePos += neighbourPos;
                 neighbourCount += 1;
             }
 
@@ -174,7 +180,7 @@ public class Flock : MonoBehaviour {
             centrePos = centrePos / neighbourCount;
         }
 
-        Vector3 force = centrePos - boid.GetPosition();
+        Vector3 force = centrePos;
 
         return force;
     }
